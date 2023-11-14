@@ -1,6 +1,6 @@
 package Web;
 
-import java.io.IOException;  
+import java.io.IOException;    
 
 import java.util.List;
 
@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Dao.gestCatalogue;
+import Dao.GestionCatalogueImpl;
+import Dao.GestionCategorieImpl;
 import Dao.iGestCatalogue;
-import entite.produit;
+import entite.Produit;
+import entite.Categorie;
 
 /**
  * Servlet implementation class CatalogueSrv
@@ -21,7 +23,9 @@ import entite.produit;
 public class CatalogueSrv extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-    private iGestCatalogue gestCatalogue;
+    private GestionCatalogueImpl gestCatalogue;
+    private GestionCategorieImpl gestCategorie;
+    
 
     public CatalogueSrv() {
         // TODO Auto-generated constructor stub
@@ -32,7 +36,8 @@ public class CatalogueSrv extends HttpServlet {
         super.init();
 
         // Initialize the gestionCategorie object here
-        gestCatalogue = new gestCatalogue(); // Replace with your actual implementation
+        gestCatalogue = new GestionCatalogueImpl(); // Replace with your actual implementation
+        gestCategorie = new GestionCategorieImpl();
     }
     
     @Override
@@ -49,7 +54,10 @@ public class CatalogueSrv extends HttpServlet {
                     String ename = request.getParameter("name");
                     String eref = request.getParameter("ref");
                     int equantity = Integer.parseInt(request.getParameter("qte"));
-                    produit eproduct = new produit(eid, ename, eref, equantity);
+                    int ecategorieId = Integer.parseInt(request.getParameter("ctg"));
+                    Categorie ecategorie = gestCategorie.getGategorie(ecategorieId);
+                    
+                    Produit eproduct = new Produit(eid, ename, eref, equantity, ecategorie);
                     System.out.print(eproduct);	
             		gestCatalogue.updateProduct(eproduct);
                     System.out.print(eproduct);	
@@ -57,17 +65,23 @@ public class CatalogueSrv extends HttpServlet {
             	break;
                 	
             	case "add":
+            		List<Categorie> categories = gestCategorie.getAllCategories();
+            		request.setAttribute("categories", categories);
             		request.getRequestDispatcher("addProduct.jsp").forward(request, response);
             		break;
             		
             	case "newProduct":
-          
-                    int id = Integer.parseInt(request.getParameter("id"));
                     String name = request.getParameter("name");
                     String ref = request.getParameter("ref");
                     int quantity = Integer.parseInt(request.getParameter("quantity"));
-                    produit product = new produit(id, name, ref, quantity);
+                    int categorieId = Integer.parseInt(request.getParameter("ctg"));
+                    
+                    Categorie categorie = gestCategorie.getGategorie(categorieId);
+                    
+                    Produit product = new Produit(name, ref, quantity, categorie);
+                    
                     gestCatalogue.addProduct(product);
+                    
                     showProducts(request, response);
             		break;
                 
@@ -85,7 +99,7 @@ public class CatalogueSrv extends HttpServlet {
             		
             		String arg = request.getParameter("arg");
             		// Get the list of products from the DAO
-            		List<produit> produits = gestCatalogue.getproduitsBYMC(arg);
+            		List<Produit> produits = gestCatalogue.getproduitsBYMC(arg);
 
             		// Set the list of products as an attribute in the request
             		request.setAttribute("produits", produits);
@@ -107,10 +121,13 @@ public class CatalogueSrv extends HttpServlet {
     
     private void showProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
 		// Get the list of products from the DAO
-		List<produit> produits = gestCatalogue.getAllProducts();
+		List<Produit> produits = gestCatalogue.getAllProducts();
 
 		// Set the list of products as an attribute in the request
 		request.setAttribute("produits", produits);
+		
+		List<Categorie> categories = gestCategorie.getAllCategories();
+		request.setAttribute("categories", categories);
 
 		// Forward the request to a JSP page for rendering
 		request.getRequestDispatcher("product.jsp").forward(request, response);

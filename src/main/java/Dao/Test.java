@@ -1,15 +1,13 @@
 package Dao;
 
-import entite.produit;
+import entite.Produit;
 
 public class Test {
-	public static void main(String[] args) {
-		iGestCatalogue gestion = new gestCatalogue();
-		
-		gestion.addProduct(new produit(0, "Laptop Asus", "EFGH5GD678", 49));
-
-	System.out.print(gestion.getAllProducts());	
-		
-	}
+//	public static void main(String[] args) {
+//		iGestCatalogue gestion = new gestCatalogue();
+//
+//	System.out.print(gestion.getAllProducts());	
+//		
+//	}
 
 }

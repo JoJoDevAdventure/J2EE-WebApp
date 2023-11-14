@@ -48,6 +48,7 @@
 					<th>ID</th>
 					<th>Name</th>
 					<th>Ref</th>
+					<th>Categorie</th>
 					<th>Quantity</th>
 					<th>Action</th>
 				</tr>
@@ -59,10 +60,11 @@
 						<td>${produit.id}</td>
 						<td>${produit.nom}</td>
 						<td>${produit.pren}</td>
+						<td>${produit.categorie.name}</td>
 						<td>${produit.qte}</td>
 
 						<td><a href="#"
-							onClick="openEditModal(${produit.id}, '${produit.nom}', '${produit.pren}', ${produit.qte})">
+							onClick="openEditModal(${produit.id}, '${produit.nom}', '${produit.pren}', ${produit.qte}, ${produit.categorie.id})">
 								<i class="fas fa-edit"></i> Modify
 
 						</a> <!-- Modal for Editing Product -->
@@ -98,6 +100,16 @@
 													<label for="editQte">Quantity:</label> <input type="text"
 														class="form-control" id="qte" name="qte">
 												</div>
+												<div class="form-group">
+													<label for="category">Category:</label> <select
+														class="form-control" id="ctg" name="ctg">
+														<!-- Iterate over categories and create options -->
+														<c:forEach var="categorie" items="${categories}">
+															<option value="${categorie.id}"
+																${categorie.id eq produit.categorie.id ? 'selected' : ''}>${categorie.name}</option>
+														</c:forEach>
+													</select>
+												</div>
 												<div class="modal-footer">
 													<button type=button class="btn btn-secondary"
 														data-dismiss="modal">Cancel</button>
@@ -125,12 +137,13 @@
 
 	<script>
     // Function to open the modal and populate fields with product data
-    function openEditModal(id, name, ref, qte) {
+    function openEditModal(id, name, ref, qte, cid) {
     	
         $('#id').val(id);
         $('#name').val(name);
         $('#ref').val(ref);
         $('#qte').val(qte);
+        $('#ctg').val(cid);
         $('#editModal').modal('show');
     }
 	</script>

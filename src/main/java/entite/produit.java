@@ -1,17 +1,40 @@
 package entite;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-public class produit {
+@Entity
+public class Produit {
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Use GenerationType.IDENTITY for auto-increment
 	int id;
 	String nom;
 	String pren;
 	int qte;
+	@ManyToOne
+    private Categorie categorie;
 	
-	public produit(int id, String nom, String pren, int qte) {
+    public Produit() {
+    	
+    }
+
+    public Produit(String nom, String pren, int qte, Categorie categorie) {
 		this.nom = nom;
 		this.pren = pren;
 		this.qte = qte;
-		this.id=id;
-	}
+		this.categorie = categorie;
+    }
+    
+    public Produit(int id, String nom, String pren, int qte, Categorie categorie) {
+    	this.id = id;
+		this.nom = nom;
+		this.pren = pren;
+		this.qte = qte;
+		this.categorie = categorie;
+    }
 
 	public int getId() {
 		return id;
@@ -44,13 +67,18 @@ public class produit {
 	public void setQte(int qte) {
 		this.qte = qte;
 	}
+	
+	public Categorie getCategorie() {
+		return categorie;
+	}
+
+	public void setCategorie(Categorie categorie) {
+		this.categorie = categorie;
+	}
 
 	@Override
 	public String toString() {
 		return "produit [id=" + id + ", nom=" + nom + ", pren=" + pren + ", qte=" + qte + "]";
 	}
-	
-	
-	
 
 }

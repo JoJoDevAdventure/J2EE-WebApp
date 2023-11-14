@@ -2,14 +2,20 @@ package Dao;
 
 import java.util.List;
 
-import entite.produit;
+import entite.Produit;
 
 public interface iGestCatalogue {
-	public void addProduct(produit p);
-	  List<produit> getAllProducts() ;
-	  public void deleteProduct(int id);
-		public void updateProduct(produit p);
-		public produit getProduct(int id);
-		public List<produit> getproduitsBYMC(String mc);
+	
+	public void addProduct(Produit p);
+
+	List<Produit> getAllProducts();
+
+	public void deleteProduct(int id);
+
+	public void updateProduct(Produit p);
+
+	public Produit getProduct(int id);
+
+	public List<Produit> getproduitsBYMC(String mc);
 
 }
